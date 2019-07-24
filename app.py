@@ -3,11 +3,13 @@
 
 __author__ = 'yxf'
 
+import os
 from flask import Flask, escape, url_for, render_template, request, session, send_from_directory
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = '{h║R[HKf,F'
-app.config['UPLOAD_FOLDER'] = 'C:/Users/Administrator/Desktop/uploads/'
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)),'uploads')
+
 @app.route('/login',methods={'post','get'})
 def login():
     """login api,when method is get,redirect login.html
@@ -36,9 +38,9 @@ def upload():
     """
     if request.method == 'POST' and 'username' in session:
         f = request.files['image']
-        f.save('C:/Users/Administrator/Desktop/uploads/'+ secure_filename(f.filename))
-        return "success"
-    return "error,may be you need login first?"
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+        return {"status":"success"}
+    return {"error":"error,may be you need login first?"}
 
 @app.route('/logout',methods=["GET"])
 def logout():
@@ -78,6 +80,3 @@ def valid_login(username,password):
 
 def login_success():
     pass
-
-
-

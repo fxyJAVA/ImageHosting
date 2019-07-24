@@ -36,6 +36,23 @@
                      }
                 })
            })
+
+			$(document).keyup(function(e){
+				var key = e.which
+				if(key == 13) {
+					var username = $("#username").val()
+					var password = $("#password").val()
+					$.post('/login',{username:username,password:password},function(data){
+						 console.log(data)
+						 if("success"==data) {
+							   window.location.href="/home"
+						 } else {
+							$("#error").text(data)
+							$("#error").fadeIn()
+						 }
+					})
+				}
+			})
        });
     </script>
 </head>
